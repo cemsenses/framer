@@ -1,2 +1,0 @@
-import{t as e}from"./rolldown-runtime.uXsZyavj.mjs";function t(e,t){return{description:`Palmer, a minimal portfolio framer template, is a perfect fit for personal portfolios, designers, freelancers, agencies, and photographers.`,favicon:`/images/p4xJl6TIH0Vp2tyPPgyAyrl2dJM.png`,robots:`max-image-preview:large`,socialImage:`/images/iDMfgcKztMDMA6ophZ3qtojBnRo.png`,title:`Palmer® - Minimal Portfolio & Agency`}}var n=e((()=>{}));export{t as n,n as t};
-//# sourceMappingURL=shared-lib.BkdpK-Aa.mjs.map
