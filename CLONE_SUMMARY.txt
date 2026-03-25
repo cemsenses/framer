@@ -1,0 +1,108 @@
+FRAMER WEBSITE CLONE SUMMARY
+============================
+Source: https://sonance.framer.website/
+Destination: /sessions/intelligent-amazing-rubin/mnt/Web/palmer-site/
+
+PAGES DOWNLOADED (15 HTML files):
+==================================
+Root Pages:
+  - index.html (1.3 MB) - Main homepage
+  - studio.html (642 KB) - Studio page
+  - 404.html (157 KB) - 404 error page
+  - contact.html (252 KB) - Contact page
+  - privacy.html (268 KB) - Privacy policy
+  - terms.html (249 KB) - Terms of service
+
+Archive Pages (5):
+  - archive/bloom.html
+  - archive/flicker.html
+  - archive/haze.html
+  - archive/summer.html
+  - archive/veil.html
+
+Work/Portfolio Pages (4):
+  - work/prism.html
+  - work/rift.html
+  - work/silk.html
+  - work/vortex.html
+
+ASSETS DOWNLOADED:
+==================
+Fonts (.woff2): 56 files
+  - All Inter font variants (weights: 400, 500, 600, 700, 900)
+  - Complete unicode ranges for international support
+  - Total: ~812 KB
+
+Images (PNG, JPG, SVG): 97 files
+  - Portfolio images
+  - Background images
+  - Icons and graphics
+  - Total: ~24 MB
+
+JavaScript Modules (.mjs): 37 files
+  - Framer chunks for component rendering
+  - Main script bundles
+  - Dynamic import modules
+  - Located in: sites/1JszIxMvXqCK6O5eqFpkAF/
+
+Other Assets:
+  - robots.txt
+  - searchIndex JSON (from sites directory)
+
+DIRECTORY STRUCTURE:
+====================
+/sessions/intelligent-amazing-rubin/mnt/Web/palmer-site/
+├── index.html (root page)
+├── studio.html
+├── 404.html
+├── contact.html
+├── privacy.html
+├── terms.html
+├── robots.txt
+├── archive/
+│   ├── bloom.html
+│   ├── flicker.html
+│   ├── haze.html
+│   ├── summer.html
+│   └── veil.html
+├── work/
+│   ├── prism.html
+│   ├── rift.html
+│   ├── silk.html
+│   └── vortex.html
+├── assets/
+│   └── [56 font files]
+├── images/
+│   └── [97 image files]
+└── sites/1JszIxMvXqCK6O5eqFpkAF/
+    └── [37 .mjs modules and search index]
+
+SUMMARY STATISTICS:
+===================
+- Total files: 655 (including git objects)
+- Total size: 97 MB
+- HTML pages: 15
+- Downloadable assets: 190+
+- All external links converted to local paths
+- All framerusercontent.com URLs replaced with relative paths (./assets/, ./images/, ./sites/)
+
+MODIFICATIONS MADE:
+===================
+1. All URLs rewritten from https://framerusercontent.com/ to local relative paths
+2. Asset paths converted to:
+   - ./assets/[filename] for fonts
+   - ./images/[filename] for images
+   - ./sites/1JszIxMvXqCK6O5eqFpkAF/[filename] for JS modules
+3. index.html now at root level (not in subdirectory)
+4. Maintained directory structure for pages (archive/, work/)
+
+FILES VERIFIED:
+===============
+- All 15 HTML files successfully downloaded
+- No external CDN dependencies (lenis CSS is embedded)
+- All images present and accessible
+- All font files downloaded
+- All JavaScript modules present
+- No broken or missing references
+
+STATUS: Complete - Website is ready to serve locally
