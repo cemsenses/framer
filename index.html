@@ -3,9 +3,45 @@
 <html>
 <head>
     <meta charset="utf-8">
-    
-    
-    
+    <script>
+    // GitHub Pages navigation fix: intercept Framer's pushState and do real page loads
+    (function() {
+      var orig = history.pushState.bind(history);
+      history.pushState = function(state, title, url) {
+        if (!url) return orig(state, title, url);
+        var u = url.toString();
+        // Extract path relative to origin
+        var path = u.startsWith('http') ? new URL(u).pathname : u;
+        // Strip /framer base prefix
+        var base = '/framer';
+        var route = path.startsWith(base) ? path.slice(base.length) : path;
+        if (!route) route = '/';
+        // Map known routes to HTML file paths
+        var staticRoutes = ['/studio','/contact','/privacy','/terms'];
+        var dynamicWork = route.match(/^\/work\/([^\/]+)\/?$/);
+        var dynamicArchive = route.match(/^\/archive\/([^\/]+)\/?$/);
+        if (dynamicWork) {
+          location.href = base + '/work/' + dynamicWork[1] + '/';
+          return;
+        } else if (dynamicArchive) {
+          location.href = base + '/archive/' + dynamicArchive[1] + '/';
+          return;
+        } else if (route === '/work') {
+          location.href = base + '/work/';
+          return;
+        } else if (route === '/archive') {
+          location.href = base + '/archive/';
+          return;
+        } else if (staticRoutes.indexOf(route) !== -1) {
+          location.href = base + route + '/';
+          return;
+        }
+        return orig(state, title, url);
+      };
+    })();
+    </script>
+
+
     <!-- Start of headStart -->
     
     <!-- End of headStart -->
