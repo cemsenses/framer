@@ -55,21 +55,26 @@
     }
 
     .nav-logo {
-      font-size: 0.85rem;
-      font-weight: 700;
-      letter-spacing: 0.08em;
+      font-size: 0.82rem;
+      font-weight: 800;
+      letter-spacing: 0.1em;
       color: var(--text);
       text-decoration: none;
       text-transform: uppercase;
+      display: inline-flex;
+      align-items: center;
+      white-space: nowrap;
+      user-select: none;
     }
-    .nav-logo span {
-      display: block;
-      font-size: 0.65rem;
-      font-weight: 500;
-      color: var(--muted);
-      letter-spacing: 0.12em;
-      margin-top: 1px;
+    .pxs-expand {
+      display: inline-block;
+      max-width: 0;
+      overflow: hidden;
+      opacity: 0;
+      transition: max-width .55s cubic-bezier(.4,0,.2,1), opacity .4s ease .08s;
     }
+    .pxs-expand-b { transition-delay: .06s, .18s; }
+    .nav-logo.pxs-open .pxs-expand { max-width: 140px; opacity: 1; }
 
     .nav-right {
       display: flex;
@@ -611,10 +616,12 @@
 
 <!-- ═══ NAV ═══ -->
 <nav class="site-nav">
-  <a class="nav-logo" href="./">
-    PIXESE
-    <span>STUDIO</span>
-  </a>
+  <a class="nav-logo" id="pxs-logo-clone" href="./"><!--
+    --><span>P</span><!--
+    --><span class="pxs-expand">IXESE&thinsp;</span><!--
+    --><span>S</span><!--
+    --><span class="pxs-expand pxs-expand-b">TUDIO</span><!--
+  --></a>
   <div class="nav-right">
     <ul class="nav-links">
       <li><a href="./">Work</a></li>
@@ -1283,5 +1290,15 @@
   showPanel(1);
 </script>
 
+<script>
+(function(){
+  var el=document.getElementById('pxs-logo-clone');
+  var on=false;
+  window.addEventListener('scroll',function(){
+    var s=window.scrollY>18;
+    if(s!==on){on=s;el.classList.toggle('pxs-open',s);}
+  },{passive:true});
+})();
+</script>
 </body>
 </html>
