@@ -674,21 +674,45 @@
         <div class="step-panel active" id="panel1">
 
           <div class="field">
-            <div class="field-label">Proje Adı <span class="req">*</span></div>
-            <input type="text" class="text-input" id="projeAdi"
-              placeholder="Proje adını girin"
-              maxlength="50"
-              oninput="updateCounter('projeAdi','cntAdi',50)" />
-            <div class="char-counter" id="cntAdi">0/50</div>
+            <div class="field-label">Firma Adı <span class="req">*</span></div>
+            <input type="text" class="text-input" id="firmaAdi"
+              placeholder="Firma adını girin" />
           </div>
 
           <div class="field">
-            <div class="field-label">Açıklama <span class="req">*</span></div>
-            <textarea class="text-input" id="aciklama"
-              placeholder="Proje açıklamasını girin"
-              maxlength="350"
-              oninput="updateCounter('aciklama','cntAciklama',350)"></textarea>
-            <div class="char-counter" id="cntAciklama">0/350</div>
+            <div class="field-label">Yetkili Kişi <span class="req">*</span></div>
+            <input type="text" class="text-input" id="yetkiliKisi"
+              placeholder="Ad Soyad" />
+          </div>
+
+          <div class="field">
+            <div class="field-label">E-posta Adresi <span class="req">*</span></div>
+            <input type="email" class="text-input" id="eposta"
+              placeholder="ornek@firma.com" />
+          </div>
+
+          <div class="field">
+            <div class="field-label">Telefon Numarası <span class="req">*</span></div>
+            <input type="tel" class="text-input" id="telefon"
+              placeholder="+90 5XX XXX XX XX" />
+          </div>
+
+          <div class="field">
+            <div class="field-label">Proje Adı <span class="req">*</span></div>
+            <input type="text" class="text-input" id="projeAdi"
+              placeholder="Proje adını girin"
+              maxlength="100"
+              oninput="updateCounter('projeAdi','cntAdi',100)" />
+            <div class="char-counter" id="cntAdi">0/100</div>
+          </div>
+
+          <div class="field">
+            <div class="field-label">Proje Detayları <span class="req">*</span></div>
+            <textarea class="text-input" id="projeDetay"
+              placeholder="Proje hakkında detaylı bilgi verin"
+              maxlength="1000"
+              oninput="updateCounter('projeDetay','cntDetay',1000)"></textarea>
+            <div class="char-counter" id="cntDetay">0/1000</div>
           </div>
 
         </div><!-- /panel1 -->
@@ -1211,7 +1235,38 @@
     if (panel) panel.classList.add('active');
   }
 
+  function validateStep1() {
+    const fields = [
+      { id: 'firmaAdi',   label: 'Firma Adı' },
+      { id: 'yetkiliKisi', label: 'Yetkili Kişi' },
+      { id: 'eposta',     label: 'E-posta Adresi' },
+      { id: 'telefon',    label: 'Telefon Numarası' },
+      { id: 'projeAdi',   label: 'Proje Adı' },
+      { id: 'projeDetay', label: 'Proje Detayları' },
+    ];
+    for (const f of fields) {
+      const el = document.getElementById(f.id);
+      if (!el || !el.value.trim()) {
+        el && el.focus();
+        el && (el.style.borderColor = 'var(--accent)');
+        setTimeout(() => el && (el.style.borderColor = ''), 2000);
+        return false;
+      }
+    }
+    // Basic email check
+    const email = document.getElementById('eposta').value.trim();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      const el = document.getElementById('eposta');
+      el.focus();
+      el.style.borderColor = 'var(--accent)';
+      setTimeout(() => el.style.borderColor = '', 2000);
+      return false;
+    }
+    return true;
+  }
+
   function nextStep() {
+    if (currentStep === 1 && !validateStep1()) return;
     if (currentStep < STEPS) {
       currentStep++;
       renderStepper(currentStep);
