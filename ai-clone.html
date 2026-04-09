@@ -1,0 +1,1287 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI CLONE - SONANCE</title>
+  <meta name="description" content="SONANCE STUDIO — AI Clone Proje Yönetimi" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:       rgb(5, 5, 5);
+      --surface:  rgb(17, 17, 17);
+      --surface2: rgb(28, 27, 27);
+      --border:   rgb(28, 27, 27);
+      --text:     rgb(222, 222, 222);
+      --muted:    rgb(173, 171, 170);
+      --accent:   rgb(250, 102, 102);
+      --accent-dim: rgba(250, 102, 102, 0.15);
+      --warn-bg:  rgba(180, 120, 30, 0.18);
+      --warn-bd:  rgba(200, 150, 60, 0.45);
+      --warn-tx:  rgb(220, 170, 80);
+      --radius:   4px;
+      --radius-lg: 8px;
+      --nav-h:    60px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ═══════════════════════════════════════
+       NAV
+    ═══════════════════════════════════════ */
+    .site-nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: var(--nav-h);
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 44px;
+      z-index: 1000;
+    }
+
+    .nav-logo {
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: var(--text);
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+    .nav-logo span {
+      display: block;
+      font-size: 0.65rem;
+      font-weight: 500;
+      color: var(--muted);
+      letter-spacing: 0.12em;
+      margin-top: 1px;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 28px;
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      text-decoration: none;
+      text-transform: uppercase;
+      transition: color .15s;
+    }
+    .nav-links a:hover, .nav-links a.active { color: var(--text); }
+
+    .nav-menu-btn {
+      background: none;
+      border: none;
+      font-family: inherit;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text);
+      cursor: pointer;
+      padding: 6px 14px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      transition: border-color .15s, color .15s;
+    }
+    .nav-menu-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* ── Menu Overlay ── */
+    .menu-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(5,5,5,0.96);
+      z-index: 999;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 32px;
+    }
+    .menu-overlay.open { display: flex; }
+
+    .menu-overlay a {
+      font-size: clamp(2rem, 6vw, 4rem);
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      text-transform: uppercase;
+      color: var(--text);
+      text-decoration: none;
+      transition: color .15s;
+    }
+    .menu-overlay a:hover { color: var(--accent); }
+    .menu-overlay a.current { color: var(--accent); }
+
+    .menu-close {
+      position: absolute;
+      top: 18px; right: 44px;
+      background: none;
+      border: none;
+      font-family: inherit;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      cursor: pointer;
+      transition: color .15s;
+    }
+    .menu-close:hover { color: var(--text); }
+
+    @media (max-width: 640px) {
+      .site-nav { padding: 0 20px; }
+      .nav-links { display: none; }
+      .menu-close { right: 20px; }
+    }
+
+    /* ═══════════════════════════════════════
+       PAGE WRAPPER
+    ═══════════════════════════════════════ */
+    .page {
+      padding-top: calc(var(--nav-h) + 60px);
+      padding-bottom: 80px;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 44px;
+    }
+    @media (max-width: 640px) { .container { padding: 0 20px; } }
+
+    /* ── Hero ── */
+    .hero {
+      margin-bottom: 48px;
+    }
+    .hero-tag {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 16px;
+    }
+    .hero h1 {
+      font-size: clamp(2.5rem, 6vw, 4rem);
+      font-weight: 900;
+      letter-spacing: -0.06em;
+      line-height: 1;
+      color: var(--text);
+      margin-bottom: 16px;
+    }
+    .hero p {
+      font-size: 0.95rem;
+      color: var(--muted);
+      max-width: 520px;
+      line-height: 1.6;
+    }
+
+    /* ═══════════════════════════════════════
+       WIZARD CARD
+    ═══════════════════════════════════════ */
+    .wizard {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+
+    /* ── Wizard Header ── */
+    .wizard-header {
+      padding: 28px 36px 20px;
+      border-bottom: 1px solid var(--border);
+    }
+    .wizard-header h2 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 4px;
+      letter-spacing: -0.03em;
+    }
+    .wizard-header p {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    /* ── Stepper ── */
+    .stepper-wrap {
+      padding: 24px 36px 0;
+    }
+    .stepper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .step-circle {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.8rem; font-weight: 700;
+      flex-shrink: 0;
+      transition: background .25s, box-shadow .25s;
+    }
+    .step-circle.done {
+      background: var(--accent);
+      color: #fff;
+    }
+    .step-circle.active {
+      background: var(--accent);
+      color: #fff;
+      box-shadow: 0 0 0 4px rgba(250,102,102,0.22);
+    }
+    .step-circle.pending {
+      background: var(--surface2);
+      color: var(--muted);
+      border: 2px solid var(--border);
+    }
+    .step-line {
+      height: 3px;
+      flex: 1;
+      max-width: 80px;
+      border-radius: 2px;
+      transition: background .3s;
+    }
+    .step-line.done { background: var(--accent); }
+    .step-line.pending { background: var(--border); }
+    .check-icon { width: 16px; height: 16px; }
+
+    .step-label {
+      text-align: center;
+      font-size: 0.73rem;
+      color: var(--muted);
+      letter-spacing: 0.04em;
+      margin-top: 10px;
+      margin-bottom: 20px;
+    }
+
+    /* ── Wizard Body ── */
+    .wizard-body {
+      padding: 8px 36px 32px;
+    }
+
+    /* Steps hidden by default */
+    .step-panel { display: none; }
+    .step-panel.active { display: block; }
+
+    /* ── Fields ── */
+    .field {
+      margin-bottom: 24px;
+    }
+    .field-label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+    .field-label .req { color: var(--accent); margin-left: 2px; }
+
+    /* ── Text Input / Textarea ── */
+    .text-input {
+      width: 100%;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--text);
+      font-size: 0.875rem;
+      padding: 12px 14px;
+      outline: none;
+      font-family: inherit;
+      transition: border-color .15s;
+      resize: none;
+    }
+    .text-input::placeholder { color: var(--muted); opacity: 0.7; }
+    .text-input:focus { border-color: var(--accent); }
+
+    textarea.text-input { min-height: 110px; resize: vertical; }
+
+    /* char counter */
+    .char-counter {
+      text-align: right;
+      font-size: 0.7rem;
+      color: var(--muted);
+      margin-top: 5px;
+    }
+    .char-counter.warn { color: rgb(220,170,80); }
+    .char-counter.limit { color: var(--accent); }
+
+    /* ── 2-col row ── */
+    .row-2col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+    @media (max-width: 640px) { .row-2col { grid-template-columns: 1fr; } }
+
+    /* ── Custom Select ── */
+    .select-wrapper { position: relative; }
+
+    .sel-trigger {
+      width: 100%;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--muted);
+      font-size: 0.875rem;
+      padding: 11px 14px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: space-between;
+      user-select: none;
+      transition: border-color .15s;
+      font-family: inherit;
+    }
+    .sel-trigger.has-value { color: var(--text); }
+    .sel-trigger:hover, .sel-trigger.open { border-color: var(--accent); color: var(--text); }
+    .sel-trigger .chev { width: 15px; height: 15px; flex-shrink: 0; color: var(--muted); transition: transform .2s; }
+    .sel-trigger.open .chev { transform: rotate(180deg); }
+
+    .sel-dropdown {
+      display: none;
+      position: absolute;
+      top: calc(100% + 4px); left: 0; right: 0;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      z-index: 200;
+      max-height: 220px;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: var(--border) transparent;
+    }
+    .sel-dropdown.open { display: block; }
+    .sel-opt {
+      padding: 10px 14px;
+      font-size: 0.82rem;
+      color: var(--text);
+      cursor: pointer;
+      transition: background .1s;
+    }
+    .sel-opt:hover { background: var(--accent-dim); color: var(--accent); }
+    .sel-opt.selected { color: var(--accent); font-weight: 600; }
+
+    /* ── Warning box ── */
+    .warning-box {
+      background: var(--warn-bg);
+      border: 1px solid var(--warn-bd);
+      border-radius: var(--radius);
+      padding: 12px 16px;
+      margin-bottom: 20px;
+      font-size: 0.82rem;
+      color: var(--warn-tx);
+      line-height: 1.55;
+    }
+
+    /* ── Section title ── */
+    .section-title {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 16px;
+      padding-top: 4px;
+    }
+
+    /* ── Divider ── */
+    .divider { border: none; border-top: 1px solid var(--border); margin: 20px 0 24px; }
+
+    /* ── Checkbox Grid ── */
+    .checkbox-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px 20px;
+    }
+    @media (max-width: 640px) { .checkbox-grid { grid-template-columns: repeat(2, 1fr); } }
+
+    .checkbox-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+    }
+    .checkbox-item input[type="checkbox"] {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 16px; height: 16px;
+      border: 2px solid var(--border);
+      border-radius: 3px;
+      background: var(--surface2);
+      cursor: pointer;
+      flex-shrink: 0;
+      position: relative;
+      transition: border-color .15s, background .15s;
+    }
+    .checkbox-item input[type="checkbox"]:checked {
+      background: var(--accent);
+      border-color: var(--accent);
+    }
+    .checkbox-item input[type="checkbox"]:checked::after {
+      content: '';
+      position: absolute;
+      left: 2px; top: -1px;
+      width: 6px; height: 10px;
+      border: 2px solid #fff;
+      border-top: none; border-left: none;
+      transform: rotate(45deg);
+    }
+    .checkbox-item span {
+      font-size: 0.82rem;
+      color: var(--text);
+      line-height: 1.3;
+    }
+    .checkbox-item:hover span { color: var(--accent); }
+
+    /* ── Onay checkbox ── */
+    .onay-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      cursor: pointer;
+      margin-top: 4px;
+    }
+    .onay-item input[type="checkbox"] {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 17px; height: 17px;
+      border: 2px solid var(--border);
+      border-radius: 3px;
+      background: var(--surface2);
+      cursor: pointer;
+      flex-shrink: 0;
+      margin-top: 1px;
+      position: relative;
+      transition: border-color .15s, background .15s;
+    }
+    .onay-item input[type="checkbox"]:checked {
+      background: var(--accent);
+      border-color: var(--accent);
+    }
+    .onay-item input[type="checkbox"]:checked::after {
+      content: '';
+      position: absolute;
+      left: 3px; top: 0;
+      width: 6px; height: 10px;
+      border: 2px solid #fff;
+      border-top: none; border-left: none;
+      transform: rotate(45deg);
+    }
+    .onay-item span {
+      font-size: 0.85rem;
+      color: var(--text);
+      line-height: 1.55;
+    }
+
+    /* ── Wizard Footer ── */
+    .wizard-footer {
+      padding: 18px 36px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .step-info {
+      font-size: 0.75rem;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .step-dots { display: flex; align-items: center; gap: 5px; }
+    .step-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--accent);
+      opacity: 0.25;
+      transition: opacity .2s, width .2s, height .2s;
+    }
+    .step-dot.on { opacity: 1; width: 9px; height: 9px; }
+
+    .footer-btns { display: flex; gap: 10px; }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-family: inherit;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      padding: 9px 20px;
+      border-radius: var(--radius);
+      border: none;
+      cursor: pointer;
+      transition: opacity .15s, border-color .15s, color .15s;
+      text-transform: uppercase;
+    }
+    .btn-ghost {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--muted);
+    }
+    .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+    }
+    .btn-primary:hover { opacity: 0.85; }
+
+    /* ── Success screen ── */
+    .success-panel {
+      display: none;
+      text-align: center;
+      padding: 60px 36px;
+    }
+    .success-panel.active { display: block; }
+    .success-icon {
+      width: 64px; height: 64px;
+      border-radius: 50%;
+      background: var(--accent-dim);
+      border: 2px solid var(--accent);
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 24px;
+    }
+    .success-icon svg { width: 28px; height: 28px; color: var(--accent); }
+    .success-panel h3 {
+      font-size: 1.5rem;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      margin-bottom: 10px;
+    }
+    .success-panel p {
+      font-size: 0.875rem;
+      color: var(--muted);
+      max-width: 380px;
+      margin: 0 auto 28px;
+      line-height: 1.6;
+    }
+    .btn-restart {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-family: inherit;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 9px 20px;
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: border-color .15s, color .15s;
+    }
+    .btn-restart:hover { border-color: var(--accent); color: var(--accent); }
+  </style>
+</head>
+<body>
+
+<!-- ═══ MENU OVERLAY ═══ -->
+<div class="menu-overlay" id="menuOverlay">
+  <button class="menu-close" onclick="closeMenu()">CLOSE</button>
+  <a href="./">WORK</a>
+  <a href="studio.html">STUDIO</a>
+  <a href="contact.html">CONTACT</a>
+  <a href="ai-clone.html" class="current">AI CLONE</a>
+</div>
+
+<!-- ═══ NAV ═══ -->
+<nav class="site-nav">
+  <a class="nav-logo" href="./">
+    SONANCE
+    <span>STUDIO</span>
+  </a>
+  <div class="nav-right">
+    <ul class="nav-links">
+      <li><a href="./">Work</a></li>
+      <li><a href="studio.html">Studio</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li><a href="ai-clone.html" class="active">AI Clone</a></li>
+    </ul>
+    <button class="nav-menu-btn" onclick="openMenu()">MENU</button>
+  </div>
+</nav>
+
+<!-- ═══ PAGE ═══ -->
+<main class="page">
+  <div class="container">
+
+    <!-- Hero -->
+    <div class="hero">
+      <div class="hero-tag">Proje Yönetimi</div>
+      <h1>AI CLONE</h1>
+      <p>VIP lisanslı karakter talebi oluşturmak için adımları takip edin. Tüm bilgileriniz güvenle iletilir.</p>
+    </div>
+
+    <!-- Wizard Card -->
+    <div class="wizard" id="wizard">
+
+      <!-- Wizard Header -->
+      <div class="wizard-header">
+        <h2>Yeni Proje</h2>
+        <p id="wizardSub">Proje bilgilerini girin</p>
+      </div>
+
+      <!-- Stepper -->
+      <div class="stepper-wrap">
+        <div class="stepper" id="stepper">
+          <div class="step-circle active" id="sc1">1</div>
+          <div class="step-line pending" id="sl1"></div>
+          <div class="step-circle pending" id="sc2">2</div>
+          <div class="step-line pending" id="sl2"></div>
+          <div class="step-circle pending" id="sc3">3</div>
+          <div class="step-line pending" id="sl3"></div>
+          <div class="step-circle pending" id="sc4">4</div>
+        </div>
+        <div class="step-label" id="stepLabel">Proje Bilgileri</div>
+      </div>
+
+      <!-- ═══════════════════════════════════
+           STEP 1 — Proje Bilgileri
+      ═══════════════════════════════════ -->
+      <div class="wizard-body">
+        <div class="step-panel active" id="panel1">
+
+          <div class="field">
+            <div class="field-label">Proje Adı <span class="req">*</span></div>
+            <input type="text" class="text-input" id="projeAdi"
+              placeholder="Proje adını girin"
+              maxlength="50"
+              oninput="updateCounter('projeAdi','cntAdi',50)" />
+            <div class="char-counter" id="cntAdi">0/50</div>
+          </div>
+
+          <div class="field">
+            <div class="field-label">Açıklama <span class="req">*</span></div>
+            <textarea class="text-input" id="aciklama"
+              placeholder="Proje açıklamasını girin"
+              maxlength="350"
+              oninput="updateCounter('aciklama','cntAciklama',350)"></textarea>
+            <div class="char-counter" id="cntAciklama">0/350</div>
+          </div>
+
+        </div><!-- /panel1 -->
+
+        <!-- ═══════════════════════════════════
+             STEP 2 — Lisanslı Karakter (VIP)
+        ═══════════════════════════════════ -->
+        <div class="step-panel" id="panel2">
+
+          <!-- Row: Lisanslı mi? + Tür -->
+          <div class="row-2col" style="margin-bottom:12px;">
+            <div class="field">
+              <div class="field-label">Lisanslı karakter kullanıyor musunuz?</div>
+              <div class="select-wrapper">
+                <div class="sel-trigger has-value" id="t0" onclick="toggleSel('d0','t0')">
+                  <span id="v0">Evet</span>
+                  <svg class="chev" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                </div>
+                <div class="sel-dropdown" id="d0">
+                  <div class="sel-opt selected" onclick="pick('t0','d0','v0','Evet')">Evet</div>
+                  <div class="sel-opt" onclick="pick('t0','d0','v0','Hayır')">Hayır</div>
+                </div>
+              </div>
+            </div>
+            <div class="field">
+              <div class="field-label">Karakter Türü</div>
+              <div class="select-wrapper">
+                <div class="sel-trigger has-value" id="t1" onclick="toggleSel('d1','t1')">
+                  <span id="v1">VIP</span>
+                  <svg class="chev" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                </div>
+                <div class="sel-dropdown" id="d1">
+                  <div class="sel-opt" onclick="pick('t1','d1','v1','Standart')">Standart</div>
+                  <div class="sel-opt selected" onclick="pick('t1','d1','v1','VIP')">VIP</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="warning-box">
+            VIP karakter talebiniz karşı tarafa iletilecektir. 2 gün içinde yanıt alacaksınız.
+          </div>
+
+          <div class="section-title">Karakter Bilgisi</div>
+
+          <!-- Rol & Kullanım Türü -->
+          <div class="row-2col">
+            <div class="field">
+              <div class="field-label">Rol</div>
+              <div class="select-wrapper">
+                <div class="sel-trigger" id="t2" onclick="toggleSel('d2','t2')">
+                  <span id="v2">Rol seçin</span>
+                  <svg class="chev" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                </div>
+                <div class="sel-dropdown" id="d2">
+                  <div class="sel-opt" onclick="pick('t2','d2','v2','Başrol')">Başrol</div>
+                  <div class="sel-opt" onclick="pick('t2','d2','v2','Yan Rol')">Yan Rol</div>
+                  <div class="sel-opt" onclick="pick('t2','d2','v2','Figüran')">Figüran</div>
+                </div>
+              </div>
+            </div>
+            <div class="field">
+              <div class="field-label">Kullanım Türü</div>
+              <div class="select-wrapper">
+                <div class="sel-trigger" id="t3" onclick="toggleSel('d3','t3')">
+                  <span id="v3">Seçiniz</span>
+                  <svg class="chev" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                </div>
+                <div class="sel-dropdown" id="d3">
+                  <div class="sel-opt" onclick="pick('t3','d3','v3','Video')">Video</div>
+                  <div class="sel-opt" onclick="pick('t3','d3','v3','Görsel')">Görsel</div>
+                  <div class="sel-opt" onclick="pick('t3','d3','v3','Ses')">Ses</div>
+                  <div class="sel-opt" onclick="pick('t3','d3','v3','Ses Klonu')">Ses Klonu</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Video Süresi & Görünme Süresi -->
+          <div class="row-2col">
+            <div class="field">
+              <div class="field-label">Video Süresi</div>
+              <div class="select-wrapper">
+                <div class="sel-trigger" id="t4" onclick="toggleSel('d4','t4')">
+                  <span id="v4">Seçiniz</span>
+                  <svg class="chev" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                </div>
+                <div class="sel-dropdown" id="d4">
+                  <div class="sel-opt" onclick="pick('t4','d4','v4','5–10 sn')">5–10 sn</div>
+                  <div class="sel-opt" onclick="pick('t4','d4','v4','10–20 sn')">10–20 sn</div>
+                  <div class="sel-opt" onclick="pick('t4','d4','v4','20–30 sn')">20–30 sn</div>
+                  <div class="sel-opt" onclick="pick('t4','d4','v4','30–60 sn')">30–60 sn</div>
+                  <div class="sel-opt" onclick="pick('t4','d4','v4','1 dk')">1 dk</div>
+                  <div class="sel-opt" onclick="pick('t4','d4','v4','2 dk')">2 dk</div>
+                  <div class="sel-opt" onclick="pick('t4','d4','v4','3 dk')">3 dk</div>
+                  <div class="sel-opt" onclick="pick('t4','d4','v4','4 dk')">4 dk</div>
+                  <div class="sel-opt" onclick="pick('t4','d4','v4','5 dk')">5 dk</div>
+                  <div class="sel-opt" onclick="pick('t4','d4','v4','5–10 dk')">5–10 dk</div>
+                  <div class="sel-opt" onclick="pick('t4','d4','v4','10–15 dk')">10–15 dk</div>
+                  <div class="sel-opt" onclick="pick('t4','d4','v4','15–30 dk')">15–30 dk</div>
+                  <div class="sel-opt" onclick="pick('t4','d4','v4','30+ dk')">30+ dk</div>
+                </div>
+              </div>
+            </div>
+            <div class="field">
+              <div class="field-label">Görünme Süresi</div>
+              <div class="select-wrapper">
+                <div class="sel-trigger" id="t5" onclick="toggleSel('d5','t5')">
+                  <span id="v5">Seçiniz</span>
+                  <svg class="chev" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                </div>
+                <div class="sel-dropdown" id="d5">
+                  <div class="sel-opt" onclick="pick('t5','d5','v5','5–10 sn')">5–10 sn</div>
+                  <div class="sel-opt" onclick="pick('t5','d5','v5','10–20 sn')">10–20 sn</div>
+                  <div class="sel-opt" onclick="pick('t5','d5','v5','20–30 sn')">20–30 sn</div>
+                  <div class="sel-opt" onclick="pick('t5','d5','v5','30–60 sn')">30–60 sn</div>
+                  <div class="sel-opt" onclick="pick('t5','d5','v5','1 dk')">1 dk</div>
+                  <div class="sel-opt" onclick="pick('t5','d5','v5','2 dk')">2 dk</div>
+                  <div class="sel-opt" onclick="pick('t5','d5','v5','3 dk')">3 dk</div>
+                  <div class="sel-opt" onclick="pick('t5','d5','v5','4 dk')">4 dk</div>
+                  <div class="sel-opt" onclick="pick('t5','d5','v5','5 dk')">5 dk</div>
+                  <div class="sel-opt" onclick="pick('t5','d5','v5','5–10 dk')">5–10 dk</div>
+                  <div class="sel-opt" onclick="pick('t5','d5','v5','10–15 dk')">10–15 dk</div>
+                  <div class="sel-opt" onclick="pick('t5','d5','v5','15–30 dk')">15–30 dk</div>
+                  <div class="sel-opt" onclick="pick('t5','d5','v5','30+ dk')">30+ dk</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Yoğunluk & Diyalog -->
+          <div class="row-2col">
+            <div class="field">
+              <div class="field-label">Yoğunluk</div>
+              <div class="select-wrapper">
+                <div class="sel-trigger" id="t6" onclick="toggleSel('d6','t6')">
+                  <span id="v6">Seçiniz</span>
+                  <svg class="chev" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                </div>
+                <div class="sel-dropdown" id="d6">
+                  <div class="sel-opt" onclick="pick('t6','d6','v6','1–5')">1–5</div>
+                  <div class="sel-opt" onclick="pick('t6','d6','v6','6–10')">6–10</div>
+                  <div class="sel-opt" onclick="pick('t6','d6','v6','11–20')">11–20</div>
+                  <div class="sel-opt" onclick="pick('t6','d6','v6','21–50')">21–50</div>
+                  <div class="sel-opt" onclick="pick('t6','d6','v6','50+')">50+</div>
+                </div>
+              </div>
+            </div>
+            <div class="field">
+              <div class="field-label">Diyalog Durumu</div>
+              <div class="select-wrapper">
+                <div class="sel-trigger" id="t7" onclick="toggleSel('d7','t7')">
+                  <span id="v7">Seçiniz</span>
+                  <svg class="chev" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                </div>
+                <div class="sel-dropdown" id="d7">
+                  <div class="sel-opt" onclick="pick('t7','d7','v7','Diyaloglu')">Diyaloglu</div>
+                  <div class="sel-opt" onclick="pick('t7','d7','v7','Diyalogsuz')">Diyalogsuz</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Sektör & Kullanım Alanı -->
+          <div class="row-2col">
+            <div class="field">
+              <div class="field-label">Sektör</div>
+              <div class="select-wrapper">
+                <div class="sel-trigger" id="t8" onclick="toggleSel('d8','t8')">
+                  <span id="v8">Seçiniz</span>
+                  <svg class="chev" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                </div>
+                <div class="sel-dropdown" id="d8">
+                  <div class="sel-opt" onclick="pick('t8','d8','v8','Bankacılık')">Bankacılık</div>
+                  <div class="sel-opt" onclick="pick('t8','d8','v8','Sigorta')">Sigorta</div>
+                  <div class="sel-opt" onclick="pick('t8','d8','v8','Yatırım')">Yatırım</div>
+                  <div class="sel-opt" onclick="pick('t8','d8','v8','Fintech')">Fintech</div>
+                  <div class="sel-opt" onclick="pick('t8','d8','v8','Gayrimenkul')">Gayrimenkul</div>
+                  <div class="sel-opt" onclick="pick('t8','d8','v8','Yazılım')">Yazılım</div>
+                  <div class="sel-opt" onclick="pick('t8','d8','v8','Telekom')">Telekom</div>
+                  <div class="sel-opt" onclick="pick('t8','d8','v8','Yapay Zeka')">Yapay Zeka</div>
+                  <div class="sel-opt" onclick="pick('t8','d8','v8','Oyun')">Oyun</div>
+                  <div class="sel-opt" onclick="pick('t8','d8','v8','Blockchain')">Blockchain</div>
+                  <div class="sel-opt" onclick="pick('t8','d8','v8','Alkollü İçecek')">Alkollü İçecek</div>
+                  <div class="sel-opt" onclick="pick('t8','d8','v8','Gıda')">Gıda</div>
+                  <div class="sel-opt" onclick="pick('t8','d8','v8','Fast Food')">Fast Food</div>
+                  <div class="sel-opt" onclick="pick('t8','d8','v8','Moda')">Moda</div>
+                  <div class="sel-opt" onclick="pick('t8','d8','v8','Tekstil')">Tekstil</div>
+                  <div class="sel-opt" onclick="pick('t8','d8','v8','Kozmetik')">Kozmetik</div>
+                  <div class="sel-opt" onclick="pick('t8','d8','v8','Mücevher')">Mücevher</div>
+                  <div class="sel-opt" onclick="pick('t8','d8','v8','Mobilya')">Mobilya</div>
+                  <div class="sel-opt" onclick="pick('t8','d8','v8','Sağlık')">Sağlık</div>
+                  <div class="sel-opt" onclick="pick('t8','d8','v8','İlaç')">İlaç</div>
+                  <div class="sel-opt" onclick="pick('t8','d8','v8','Wellness')">Wellness</div>
+                  <div class="sel-opt" onclick="pick('t8','d8','v8','Spor')">Spor</div>
+                  <div class="sel-opt" onclick="pick('t8','d8','v8','Petrol')">Petrol</div>
+                  <div class="sel-opt" onclick="pick('t8','d8','v8','Yenilenebilir Enerji')">Yenilenebilir Enerji</div>
+                  <div class="sel-opt" onclick="pick('t8','d8','v8','Elektrik')">Elektrik</div>
+                  <div class="sel-opt" onclick="pick('t8','d8','v8','Otomotiv')">Otomotiv</div>
+                  <div class="sel-opt" onclick="pick('t8','d8','v8','Havacılık')">Havacılık</div>
+                  <div class="sel-opt" onclick="pick('t8','d8','v8','Lojistik')">Lojistik</div>
+                  <div class="sel-opt" onclick="pick('t8','d8','v8','Tarım')">Tarım</div>
+                  <div class="sel-opt" onclick="pick('t8','d8','v8','Kimya')">Kimya</div>
+                  <div class="sel-opt" onclick="pick('t8','d8','v8','Üniversite')">Üniversite</div>
+                  <div class="sel-opt" onclick="pick('t8','d8','v8','Online Eğitim')">Online Eğitim</div>
+                  <div class="sel-opt" onclick="pick('t8','d8','v8','Sanat')">Sanat</div>
+                  <div class="sel-opt" onclick="pick('t8','d8','v8','Yayıncılık')">Yayıncılık</div>
+                  <div class="sel-opt" onclick="pick('t8','d8','v8','Müzik')">Müzik</div>
+                  <div class="sel-opt" onclick="pick('t8','d8','v8','Müze')">Müze</div>
+                  <div class="sel-opt" onclick="pick('t8','d8','v8','Otel')">Otel</div>
+                  <div class="sel-opt" onclick="pick('t8','d8','v8','Turizm')">Turizm</div>
+                  <div class="sel-opt" onclick="pick('t8','d8','v8','Etkinlik')">Etkinlik</div>
+                  <div class="sel-opt" onclick="pick('t8','d8','v8','Kamu')">Kamu</div>
+                  <div class="sel-opt" onclick="pick('t8','d8','v8','STK')">STK</div>
+                  <div class="sel-opt" onclick="pick('t8','d8','v8','Diğer')">Diğer</div>
+                </div>
+              </div>
+            </div>
+            <div class="field">
+              <div class="field-label">Kullanım Alanı</div>
+              <div class="select-wrapper">
+                <div class="sel-trigger" id="t9" onclick="toggleSel('d9','t9')">
+                  <span id="v9">Seçiniz</span>
+                  <svg class="chev" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                </div>
+                <div class="sel-dropdown" id="d9">
+                  <div class="sel-opt" onclick="pick('t9','d9','v9','Reklam Filmi')">Reklam Filmi</div>
+                  <div class="sel-opt" onclick="pick('t9','d9','v9','TV Reklamı')">TV Reklamı</div>
+                  <div class="sel-opt" onclick="pick('t9','d9','v9','Sosyal Medya Kampanyası')">Sosyal Medya Kampanyası</div>
+                  <div class="sel-opt" onclick="pick('t9','d9','v9','Influencer İçeriği')">Influencer İçeriği</div>
+                  <div class="sel-opt" onclick="pick('t9','d9','v9','Sinema Filmi')">Sinema Filmi</div>
+                  <div class="sel-opt" onclick="pick('t9','d9','v9','Dizi')">Dizi</div>
+                  <div class="sel-opt" onclick="pick('t9','d9','v9','Belgesel')">Belgesel</div>
+                  <div class="sel-opt" onclick="pick('t9','d9','v9','Kısa Film')">Kısa Film</div>
+                  <div class="sel-opt" onclick="pick('t9','d9','v9','Müzik Klibi')">Müzik Klibi</div>
+                  <div class="sel-opt" onclick="pick('t9','d9','v9','Moda')">Moda</div>
+                  <div class="sel-opt" onclick="pick('t9','d9','v9','Katalog')">Katalog</div>
+                  <div class="sel-opt" onclick="pick('t9','d9','v9','Eğitim Videosu')">Eğitim Videosu</div>
+                  <div class="sel-opt" onclick="pick('t9','d9','v9','Kurumsal Tanıtım')">Kurumsal Tanıtım</div>
+                  <div class="sel-opt" onclick="pick('t9','d9','v9','Ürün Lansmanı')">Ürün Lansmanı</div>
+                  <div class="sel-opt" onclick="pick('t9','d9','v9','Sanal Etkinlik')">Sanal Etkinlik</div>
+                  <div class="sel-opt" onclick="pick('t9','d9','v9','Video Game')">Video Game</div>
+                  <div class="sel-opt" onclick="pick('t9','d9','v9','Animasyon')">Animasyon</div>
+                  <div class="sel-opt" onclick="pick('t9','d9','v9','Podcast')">Podcast</div>
+                  <div class="sel-opt" onclick="pick('t9','d9','v9','Festival Filmi')">Festival Filmi</div>
+                  <div class="sel-opt" onclick="pick('t9','d9','v9','AR/VR')">AR/VR</div>
+                  <div class="sel-opt" onclick="pick('t9','d9','v9','İç İletişim')">İç İletişim</div>
+                  <div class="sel-opt" onclick="pick('t9','d9','v9','Diğer')">Diğer</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Görüntülenme Bölgesi & Lisans Süresi -->
+          <div class="row-2col">
+            <div class="field">
+              <div class="field-label">Görüntülenme Bölgesi</div>
+              <div class="select-wrapper">
+                <div class="sel-trigger" id="t10" onclick="toggleSel('d10','t10')">
+                  <span id="v10">Seçiniz</span>
+                  <svg class="chev" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                </div>
+                <div class="sel-dropdown" id="d10">
+                  <div class="sel-opt" onclick="pick('t10','d10','v10','Ulusal')">Ulusal</div>
+                  <div class="sel-opt" onclick="pick('t10','d10','v10','Bölgesel')">Bölgesel</div>
+                  <div class="sel-opt" onclick="pick('t10','d10','v10','Global')">Global</div>
+                </div>
+              </div>
+            </div>
+            <div class="field">
+              <div class="field-label">Lisans Süresi</div>
+              <div class="select-wrapper">
+                <div class="sel-trigger" id="t11" onclick="toggleSel('d11','t11')">
+                  <span id="v11">Seçiniz</span>
+                  <svg class="chev" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                </div>
+                <div class="sel-dropdown" id="d11">
+                  <div class="sel-opt" onclick="pick('t11','d11','v11','1 Yıl')">1 Yıl</div>
+                  <div class="sel-opt" onclick="pick('t11','d11','v11','2 Yıl')">2 Yıl</div>
+                  <div class="sel-opt" onclick="pick('t11','d11','v11','3 Yıl')">3 Yıl</div>
+                  <div class="sel-opt" onclick="pick('t11','d11','v11','Sınırsız')">Sınırsız</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Hedef Kitle & Bütçe Teklifi -->
+          <div class="row-2col">
+            <div class="field">
+              <div class="field-label">Hedef Kitle</div>
+              <div class="select-wrapper">
+                <div class="sel-trigger" id="t12" onclick="toggleSel('d12','t12')">
+                  <span id="v12">Seçiniz</span>
+                  <svg class="chev" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                </div>
+                <div class="sel-dropdown" id="d12">
+                  <div class="sel-opt" onclick="pick('t12','d12','v12','100K altı')">100K altı</div>
+                  <div class="sel-opt" onclick="pick('t12','d12','v12','100K–1M')">100K–1M</div>
+                  <div class="sel-opt" onclick="pick('t12','d12','v12','1M–10M')">1M–10M</div>
+                  <div class="sel-opt" onclick="pick('t12','d12','v12','10M+')">10M+</div>
+                </div>
+              </div>
+            </div>
+            <div class="field">
+              <div class="field-label">Bütçe Teklifi</div>
+              <input type="text" class="text-input" placeholder="Tahmini bütçe" />
+            </div>
+          </div>
+
+          <!-- Senaryo Özeti -->
+          <div class="row-2col">
+            <div class="field"><!-- spacer --></div>
+            <div class="field">
+              <div class="field-label">Senaryo Özeti</div>
+              <textarea class="text-input" placeholder="Kısa senaryo özeti"></textarea>
+            </div>
+          </div>
+
+        </div><!-- /panel2 -->
+
+        <!-- ═══════════════════════════════════
+             STEP 3 — Yayın Alanı & Proje Türü
+        ═══════════════════════════════════ -->
+        <div class="step-panel" id="panel3">
+
+          <div class="field">
+            <div class="field-label">Proje Türü <span class="req">*</span></div>
+            <div class="select-wrapper">
+              <div class="sel-trigger" id="tPT" onclick="toggleSel('dPT','tPT')">
+                <span id="vPT">Seçiniz</span>
+                <svg class="chev" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+              </div>
+              <div class="sel-dropdown" id="dPT">
+                <div class="sel-opt" onclick="pick('tPT','dPT','vPT','Reklam Filmi')">Reklam Filmi</div>
+                <div class="sel-opt" onclick="pick('tPT','dPT','vPT','TV Reklamı')">TV Reklamı</div>
+                <div class="sel-opt" onclick="pick('tPT','dPT','vPT','Uzun Metraj')">Uzun Metraj</div>
+                <div class="sel-opt" onclick="pick('tPT','dPT','vPT','Kısa Film')">Kısa Film</div>
+                <div class="sel-opt" onclick="pick('tPT','dPT','vPT','Belgesel')">Belgesel</div>
+                <div class="sel-opt" onclick="pick('tPT','dPT','vPT','TV Dizisi')">TV Dizisi</div>
+                <div class="sel-opt" onclick="pick('tPT','dPT','vPT','Sosyal Medya İçeriği')">Sosyal Medya İçeriği</div>
+                <div class="sel-opt" onclick="pick('tPT','dPT','vPT','Video Oyunu / Metaverse')">Video Oyunu / Metaverse</div>
+                <div class="sel-opt" onclick="pick('tPT','dPT','vPT','Animasyon / CGI')">Animasyon / CGI</div>
+                <div class="sel-opt" onclick="pick('tPT','dPT','vPT','Eğitsel Video')">Eğitsel Video</div>
+                <div class="sel-opt" onclick="pick('tPT','dPT','vPT','Kurumsal Sunum')">Kurumsal Sunum</div>
+                <div class="sel-opt" onclick="pick('tPT','dPT','vPT','Moda / Katalog / Editoryal')">Moda / Katalog / Editoryal</div>
+                <div class="sel-opt" onclick="pick('tPT','dPT','vPT','Müzik Videosu')">Müzik Videosu</div>
+                <div class="sel-opt" onclick="pick('tPT','dPT','vPT','Sanat / Festival')">Sanat / Festival</div>
+                <div class="sel-opt" onclick="pick('tPT','dPT','vPT','Sanal Etkinlik')">Sanal Etkinlik</div>
+                <div class="sel-opt" onclick="pick('tPT','dPT','vPT','Fotoğrafçılık')">Fotoğrafçılık</div>
+                <div class="sel-opt" onclick="pick('tPT','dPT','vPT','VR Deneyimi')">VR Deneyimi</div>
+                <div class="sel-opt" onclick="pick('tPT','dPT','vPT','AR Kampanyası')">AR Kampanyası</div>
+                <div class="sel-opt" onclick="pick('tPT','dPT','vPT','Influencer İçeriği')">Influencer İçeriği</div>
+                <div class="sel-opt" onclick="pick('tPT','dPT','vPT','Podcast / Video')">Podcast / Video</div>
+                <div class="sel-opt" onclick="pick('tPT','dPT','vPT','Fragman / Teaser')">Fragman / Teaser</div>
+                <div class="sel-opt" onclick="pick('tPT','dPT','vPT','Siyasi Kampanya İçeriği')">Siyasi Kampanya İçeriği</div>
+                <div class="sel-opt" onclick="pick('tPT','dPT','vPT','Diğer')">Diğer</div>
+              </div>
+            </div>
+          </div>
+
+          <hr class="divider" />
+
+          <div class="field">
+            <div class="field-label">Yayın Alanları <span class="req">*</span></div>
+            <div class="checkbox-grid">
+              <label class="checkbox-item"><input type="checkbox" name="yayin" value="TV" /><span>TV</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="yayin" value="Sinema" /><span>Sinema</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="yayin" value="Sosyal Medya" /><span>Sosyal Medya</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="yayin" value="Dijital Platformlar" /><span>Dijital Platformlar</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="yayin" value="Web Siteleri" /><span>Web Siteleri</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="yayin" value="Oyun İçi İçerikler" /><span>Oyun İçi İçerikler</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="yayin" value="AR / VR Platformları" /><span>AR / VR Platformları</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="yayin" value="Kurumsal Eğitim" /><span>Kurumsal Eğitim</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="yayin" value="Basılı Medya" /><span>Basılı Medya</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="yayin" value="Fuar / Etkinlik" /><span>Fuar / Etkinlik</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="yayin" value="Uluslararası Festival" /><span>Uluslararası Festival</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="yayin" value="Outdoor / Açık Alan" /><span>Outdoor / Açık Alan</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="yayin" value="Diğer" /><span>Diğer</span></label>
+            </div>
+          </div>
+
+        </div><!-- /panel3 -->
+
+        <!-- ═══════════════════════════════════
+             STEP 4 — Kullanıcı Tipi & Onay
+        ═══════════════════════════════════ -->
+        <div class="step-panel" id="panel4">
+
+          <div class="field">
+            <div class="field-label">Kullanıcı Tipi <span class="req">*</span></div>
+            <div class="select-wrapper">
+              <div class="sel-trigger" id="tKT" onclick="toggleSel('dKT','tKT')">
+                <span id="vKT">Seçiniz</span>
+                <svg class="chev" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+              </div>
+              <div class="sel-dropdown" id="dKT">
+                <div class="sel-opt" onclick="pick('tKT','dKT','vKT','Kurumsal')">Kurumsal</div>
+                <div class="sel-opt" onclick="pick('tKT','dKT','vKT','Bireysel')">Bireysel</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="onay-item">
+              <input type="checkbox" id="onayCheck" />
+              <span>Bu proje dosyasında verdiğim bilgilerin doğru olduğunu kabul ediyorum.</span>
+            </label>
+          </div>
+
+        </div><!-- /panel4 -->
+
+      </div><!-- /wizard-body -->
+
+      <!-- Success (hidden until step 4 complete) -->
+      <div class="success-panel" id="successPanel">
+        <div class="success-icon">
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+          </svg>
+        </div>
+        <h3>Proje Oluşturuldu</h3>
+        <p>VIP karakter talebiniz alındı. Ekibimiz 2 iş günü içinde sizinle iletişime geçecektir.</p>
+        <button class="btn-restart" onclick="restartWizard()">Yeni Proje Oluştur</button>
+      </div>
+
+      <!-- Wizard Footer -->
+      <div class="wizard-footer" id="wizardFooter">
+        <div class="step-info">
+          <span id="stepCounter">Adım 1 / 4</span>
+          <div class="step-dots">
+            <div class="step-dot on" id="dot1"></div>
+            <div class="step-dot" id="dot2"></div>
+            <div class="step-dot" id="dot3"></div>
+            <div class="step-dot" id="dot4"></div>
+          </div>
+        </div>
+        <div class="footer-btns">
+          <button class="btn btn-ghost" id="btnBack" onclick="prevStep()" style="display:none">Geri</button>
+          <button class="btn btn-primary" id="btnNext" onclick="nextStep()">Sonraki</button>
+        </div>
+      </div>
+
+    </div><!-- /wizard -->
+
+  </div><!-- /container -->
+</main>
+
+<script>
+  /* ── NAV ── */
+  function openMenu() {
+    document.getElementById('menuOverlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeMenu() {
+    document.getElementById('menuOverlay').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  /* ── Selects ── */
+  function toggleSel(dropId, triggerId) {
+    const drop = document.getElementById(dropId);
+    const trig = document.getElementById(triggerId);
+    const isOpen = drop.classList.contains('open');
+    closeAllDropdowns();
+    if (!isOpen) {
+      drop.classList.add('open');
+      trig.classList.add('open');
+    }
+  }
+
+  function pick(triggerId, dropId, valueId, text) {
+    document.getElementById(valueId).textContent = text;
+    const trig = document.getElementById(triggerId);
+    trig.classList.add('has-value');
+    trig.classList.remove('open');
+    document.getElementById(dropId).classList.remove('open');
+    document.querySelectorAll('#' + dropId + ' .sel-opt').forEach(o => o.classList.remove('selected'));
+    event.target.classList.add('selected');
+  }
+
+  function closeAllDropdowns() {
+    document.querySelectorAll('.sel-dropdown.open').forEach(d => d.classList.remove('open'));
+    document.querySelectorAll('.sel-trigger.open').forEach(t => t.classList.remove('open'));
+  }
+
+  document.addEventListener('click', function(e) {
+    if (!e.target.closest('.select-wrapper')) closeAllDropdowns();
+  });
+
+  /* ── Char counter ── */
+  function updateCounter(inputId, counterId, max) {
+    const el = document.getElementById(inputId);
+    const cnt = document.getElementById(counterId);
+    const len = el.value.length;
+    cnt.textContent = len + '/' + max;
+    cnt.className = 'char-counter';
+    if (len >= max) cnt.classList.add('limit');
+    else if (len >= max * 0.8) cnt.classList.add('warn');
+  }
+
+  /* ── Stepper ── */
+  const STEPS = 4;
+  let currentStep = 1;
+
+  const stepLabels = [
+    'Proje Bilgileri',
+    'Lisanslı Karakter',
+    'Yayın Alanı & Proje Türü',
+    'Kullanıcı Tipi & Onay'
+  ];
+  const stepSubs = [
+    'Proje bilgilerini girin',
+    'Karakter detaylarını belirtin',
+    'Yayın planını oluşturun',
+    'Son adım — onaylayın ve gönderin'
+  ];
+
+  const CHECK_SVG = `<svg class="check-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>`;
+
+  function renderStepper(step) {
+    for (let i = 1; i <= STEPS; i++) {
+      const sc = document.getElementById('sc' + i);
+      if (i < step) {
+        sc.className = 'step-circle done';
+        sc.innerHTML = CHECK_SVG;
+      } else if (i === step) {
+        sc.className = 'step-circle active';
+        sc.innerHTML = i;
+      } else {
+        sc.className = 'step-circle pending';
+        sc.innerHTML = i;
+      }
+      if (i < STEPS) {
+        const sl = document.getElementById('sl' + i);
+        sl.className = 'step-line ' + (i < step ? 'done' : 'pending');
+      }
+    }
+    document.getElementById('stepLabel').textContent = stepLabels[step - 1];
+    document.getElementById('wizardSub').textContent = stepSubs[step - 1];
+    document.getElementById('stepCounter').textContent = 'Adım ' + step + ' / ' + STEPS;
+
+    for (let i = 1; i <= STEPS; i++) {
+      const dot = document.getElementById('dot' + i);
+      dot.className = 'step-dot' + (i <= step ? ' on' : '');
+    }
+
+    // Back / Next buttons
+    document.getElementById('btnBack').style.display = step > 1 ? '' : 'none';
+    document.getElementById('btnNext').textContent = step === STEPS ? 'Oluştur' : 'Sonraki';
+  }
+
+  function showPanel(step) {
+    document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
+    const panel = document.getElementById('panel' + step);
+    if (panel) panel.classList.add('active');
+  }
+
+  function nextStep() {
+    if (currentStep < STEPS) {
+      currentStep++;
+      renderStepper(currentStep);
+      showPanel(currentStep);
+      window.scrollTo({ top: document.getElementById('wizard').offsetTop - 80, behavior: 'smooth' });
+    } else {
+      // Submit
+      submitWizard();
+    }
+  }
+
+  function prevStep() {
+    if (currentStep > 1) {
+      currentStep--;
+      renderStepper(currentStep);
+      showPanel(currentStep);
+      window.scrollTo({ top: document.getElementById('wizard').offsetTop - 80, behavior: 'smooth' });
+    }
+  }
+
+  function submitWizard() {
+    // Hide panels and footer, show success
+    document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
+    document.getElementById('wizardFooter').style.display = 'none';
+    document.getElementById('stepper').closest('.stepper-wrap').style.display = 'none';
+    document.getElementById('successPanel').classList.add('active');
+    window.scrollTo({ top: document.getElementById('wizard').offsetTop - 80, behavior: 'smooth' });
+  }
+
+  function restartWizard() {
+    currentStep = 1;
+    document.getElementById('wizardFooter').style.display = '';
+    document.getElementById('stepper').closest('.stepper-wrap').style.display = '';
+    document.getElementById('successPanel').classList.remove('active');
+    renderStepper(1);
+    showPanel(1);
+  }
+
+  // Init
+  renderStepper(1);
+  showPanel(1);
+</script>
+
+</body>
+</html>
